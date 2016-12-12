@@ -1,6 +1,6 @@
 {
   "name": "caas-campaign-incentives",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions",
   "main": "caas-campaign-incentives.html",
   "dependencies": {
