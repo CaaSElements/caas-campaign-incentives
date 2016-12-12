@@ -1,4 +1,5 @@
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-ajax/iron-ajax.html">
 
 <!--
 `caas-campaign-incentives`
@@ -9,12 +10,17 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
 
 <dom-module id="caas-campaign-incentives">
   <template>
-    <style>
-      :host {
-        display: block;
-      }
-    </style>
-    <h2>Hello [[prop1]]</h2>
+
+    <iron-ajax
+      id="getCampaignIncentives"
+      url="[[apiEndpoint]]/campaigns/[[campaignId]]/incentives"
+      handle-as="json"
+      method="GET"
+      last-response="{{_apiData}}"
+      debounce-duration="3000"
+      auto
+    ></iron-ajax>
+
   </template>
 
   <script>
@@ -23,11 +29,49 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
       is: 'caas-campaign-incentives',
 
       properties: {
-        prop1: {
+
+        apiEndpoint: {
           type: String,
-          value: 'caas-campaign-incentives',
+          value: null
         },
+
+        campaignId: {
+          type: String,
+          value: null
+        },
+
+        incentives: {
+          type: Array,
+          computed: '_computeIncentives(_apiData.*)'
+        },
+
+        _apiData: {
+          type: Array
+        }
+
       },
+
+      _computeIncentives: function(apiDataChange) {
+        var apiData = apiDataChange.base;
+        return apiData.map(this._parseApiDataItemToIncentive)
+      },
+
+      _parseApiDataItemToIncentive: function(apiDataItem) {
+        return {
+          message: apiDataItem.message,
+          minimumInvestment: apiDataItem.minimumInvestment,
+          costs: apiDataItem.costs,
+          forBusiness: apiDataItem.forBusiness,
+          investorCount: apiDataItem.investorCount,
+          hasInvestors: apiDataItem.hasInvestors,
+          inStock: apiDataItem.inStock,
+          hasStock: apiDataItem.hasStock,
+          currentStock: apiDataItem.currentStock,
+          available: apiDataItem.available,
+          id: apiDataItem.id,
+          contractTypeId: apiDataItem.contractTypeId
+        }
+      }
 
     });
   </script>
