@@ -30,22 +30,34 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
 
       properties: {
 
+        /**
+        * The server side API endpoint
+        */
         apiEndpoint: {
           type: String,
           value: null
         },
 
+        /**
+        * The campaign Id associated with the campaign
+        */
         campaignId: {
           type: String,
           value: null
         },
 
+        /**
+        * List of all available incentives for this `campaignId`
+        */
         incentives: {
           type: Array,
           computed: '_computeIncentives(_apiData.*)',
           notify: true
         },
 
+        /**
+        * Object of Arrays of all available incentives for this `campaignId`, grouped by `contractTypeId`
+        */
         groupedIncentives: {
           type: Object,
           computed: '_computeGroupedIncentives(incentives.*)',
