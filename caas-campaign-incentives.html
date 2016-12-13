@@ -46,6 +46,12 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
           notify: true
         },
 
+        groupedIncentives: {
+          type: Object,
+          computed: '_computeGroupedIncentives(incentives.*)',
+          notify: true
+        },
+
         _apiData: {
           type: Array
         }
@@ -55,6 +61,15 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
       _computeIncentives: function(apiDataChange) {
         var apiData = apiDataChange.base;
         return apiData.map(this._parseApiDataItemToIncentive)
+      },
+
+      _computeGroupedIncentives: function() {
+        var groupedIncentives = {};
+        this.incentives.map(function(incentive) {
+          if(!groupedIncentives[incentive.contractTypeId]) groupedIncentives[incentive.contractTypeId] = [];
+          groupedIncentives[incentive.contractTypeId].push(incentive);
+        })
+        return groupedIncentives;
       },
 
       _parseApiDataItemToIncentive: function(apiDataItem) {
