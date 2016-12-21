@@ -168,7 +168,15 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
 
       /*
       * Add Item
-      * @param {Object} item The Item to be added
+      * @param {{
+      * title: String,
+      * message: String,
+      * minimumInvestment: Number,
+      * costs: Number,
+      * totalStock: Number,
+      * contractTypeId: Number,
+      * forBusiness: Boolean
+      }} item The Item to be added
       */
       addItem: function(item) {
         this.$.addItem.body = JSON.stringify(item);
@@ -176,8 +184,17 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
       },
 
       /**
-      * Remove Item
-      * @param {Object} item The Item to be updated
+      * Update Item
+      * @param {{
+      * id: String,
+      * title: String,
+      * message: String,
+      * minimumInvestment: Number,
+      * costs: Number,
+      * totalStock: Number,
+      * contractTypeId: Number,
+      * forBusiness: Boolean
+      }} item The Item to be updated
       */
       updateItem: function(item) {
         this.$.updateItem.url = this.apiEndpoint + '/entrepreneurs/'+ this.campaignId +'/incentives/' + item.id;
@@ -187,7 +204,7 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
 
       /**
       * Remove Item
-      * @param {Number} id The Id of the Incentive to be removed
+      * @param {String} id The Id of the Incentive to be removed
       */
       removeItem: function(id) {
         this.$.removeItem.url = this.apiEndpoint + '/entrepreneurs/'+ this.campaignId +'/incentives/' + id;
