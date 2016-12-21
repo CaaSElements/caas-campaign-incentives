@@ -12,13 +12,53 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
   <template>
 
     <iron-ajax
-      id="getCampaignIncentives"
+      id="getSettings"
+      url="[[apiEndpoint]]/campaigns/[[campaignId]]/incentives/settings"
+      method="GET"
+      last-response="{{_apiSettings}}"
+      debounce-duration="3000"
+      auto="[[campaignId]]"
+    ></iron-ajax>
+
+    <iron-ajax
+      id="getItems"
       url="[[apiEndpoint]]/campaigns/[[campaignId]]/incentives"
-      handle-as="json"
       method="GET"
       last-response="{{_apiData}}"
       debounce-duration="3000"
-      auto
+      auto="[[autoDownload]]"
+    ></iron-ajax>
+
+    <iron-ajax
+      id="addItem"
+      headers="[[_requestHeaders]]"
+      url="[[apiEndpoint]]/entrepreneurs/[[campaignId]]/incentives"
+      method="POST"
+      on-response="_handleAddItemResponse"
+      on-error="_handleAddItemError"
+      last-response="{{_apiData}}"
+      debounce-duration="3000"
+    ></iron-ajax>
+
+    <iron-ajax
+      id="updateItem"
+      headers="[[_requestHeaders]]"
+      method="PUT"
+      on-response="_handleUpdateItemResponse"
+      on-error="_handleUpdateItemError"
+      last-response="{{_apiData}}"
+      debounce-duration="3000"
+    ></iron-ajax>
+
+    <iron-ajax
+      id="removeItem"
+      headers="[[_requestHeaders]]"
+      content-type="json"
+      method="DELETE"
+      on-response="_handleRemoveItemResponse"
+      on-error="_handleRemoveItemError"
+      last-response="{{_apiData}}"
+      debounce-duration="3000"
     ></iron-ajax>
 
   </template>
@@ -36,6 +76,23 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
         apiEndpoint: {
           type: String,
           value: null
+        },
+
+        /**
+        * Exposes the access token (JSON web token) associated with the current session
+        */
+        accessToken: {
+          type: String,
+          value: null,
+          notify: true
+        },
+
+        /**
+        * Determines wheter the incentives should be downloaded automatically
+        */
+        autoDownload: {
+          type: Boolean,
+          value: false
         },
 
         /**
@@ -64,10 +121,77 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
           notify: true
         },
 
+        /*
+        Exposes the minimum allowed amount
+        */
+        minimumAllowedInvestment: {
+          type: Number,
+          computed: '_getApiValue(_apiSettings.minimumAllowedInvestment)',
+          notify: true
+        },
+
+        /*
+        Exposes the maximum allowed amount
+        */
+        maximumAllowedInvestment: {
+          type: Number,
+          computed: '_getApiValue(_apiSettings.maximumAllowedInvestment)',
+          notify: true
+        },
+
+        /*
+        Exposes an array of available contract type ids
+        */
+        allowedContractTypeIds: {
+          type: Number,
+          computed: '_getApiValue(_apiSettings.allowedContractTypeIds)',
+          notify: true
+        },
+
+        _requestHeaders: {
+          type: Object,
+          computed: '_computeRequestHeaders(accessToken)'
+        },
+
         _apiData: {
           type: Array
         }
 
+      },
+
+      /*
+      * Download All Incentives
+      */
+      getItems: function() {
+        this.$.getItems.generateRequest();
+      },
+
+      /*
+      * Add Item
+      * @param {Object} item The Item to be added
+      */
+      addItem: function(item) {
+        this.$.addItem.body = JSON.stringify(item);
+        this.$.addItem.generateRequest();
+      },
+
+      /**
+      * Remove Item
+      * @param {Object} item The Item to be updated
+      */
+      updateItem: function(item) {
+        this.$.updateItem.url = this.apiEndpoint + '/entrepreneurs/'+ this.campaignId +'/incentives/' + item.id;
+        this.$.updateItem.body = JSON.stringify(item);
+        this.$.updateItem.generateRequest();
+      },
+
+      /**
+      * Remove Item
+      * @param {Number} id The Id of the Incentive to be removed
+      */
+      removeItem: function(id) {
+        this.$.removeItem.url = this.apiEndpoint + '/entrepreneurs/'+ this.campaignId +'/incentives/' + id;
+        this.$.removeItem.generateRequest();
       },
 
       _computeIncentives: function(apiDataChange) {
@@ -85,22 +209,74 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
         return groupedIncentives;
       },
 
+      _computeRequestHeaders: function(accessToken) {
+        return {
+          'authorization': 'Bearer ' + accessToken 
+        }
+      },
+
+      _getApiValue: function(value) {
+        return value;
+      },
+
       _parseApiDataItemToIncentive: function(apiDataItem) {
         return {
+          title: apiDataItem.title,
           message: apiDataItem.message,
           minimumInvestment: apiDataItem.minimumInvestment,
           costs: apiDataItem.costs,
           forBusiness: apiDataItem.forBusiness,
-          investorCount: apiDataItem.investorCount,
+          numberOfInvestors: apiDataItem.investorCount,
           hasInvestors: apiDataItem.hasInvestors,
-          inStock: apiDataItem.inStock,
           hasStock: apiDataItem.hasStock,
+          totalStock: apiDataItem.inStock,
           currentStock: apiDataItem.currentStock,
           available: apiDataItem.available,
           id: apiDataItem.id,
           contractTypeId: apiDataItem.contractTypeId
         }
-      }
+      },
+
+      _handleAddItemResponse: function() {
+        this.$.addItem.body = {};
+        this.fire('incentive-added');
+      },
+
+      _handleAddItemError: function(evt) {
+        this.$.addItem.body = {};
+        this.fire('incentive-add-error', {
+          message: evt.detail.error.message,
+          response: event.detail.request.xhr.response
+        });
+      },
+
+      _handleUpdateItemResponse: function() {
+        this.$.updateItem.url = null;
+        this.$.updateItem.body = {};
+        this.fire('incentive-updated');
+      },
+
+      _handleUpdateItemError: function(evt) {
+        this.$.updateItem.url = null;
+        this.$.updateItem.body = {};
+        this.fire('incentive-update-error', {
+          message: evt.detail.error.message,
+          response: event.detail.request.xhr.response
+        });
+      },
+
+      _handleRemoveItemResponse: function() {
+        this.$.removeItem.url = null;
+        this.fire('incentive-deleted');
+      },
+
+      _handleRemoveItemError: function(evt) {
+        this.$.removeItem.url = null;
+        this.fire('incentive-delete-error', {
+          message: evt.detail.error.message,
+          response: event.detail.request.xhr.response
+        });
+      },
 
     });
   </script>
