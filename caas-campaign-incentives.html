@@ -88,7 +88,7 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
         },
 
         /**
-        * Determines wheter the incentives should be downloaded automatically
+        * Determines whether the incentives should be downloaded automatically
         */
         autoDownload: {
           type: Boolean,
@@ -204,7 +204,7 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
 
       /**
       * Remove Item
-      * @param {String} id The Id of the Incentive to be removed
+      * @param {String} id The Id of the item to be removed
       */
       removeItem: function(id) {
         this.$.removeItem.url = this.apiEndpoint + '/entrepreneurs/'+ this.campaignId +'/incentives/' + id;
