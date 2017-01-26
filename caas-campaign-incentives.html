@@ -5,7 +5,7 @@
 `caas-campaign-incentives`
 Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
 
-@demo demo/index.html 
+@demo demo/index.html
 -->
 
 <dom-module id="caas-campaign-incentives">
@@ -27,6 +27,7 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
       last-response="{{_apiData}}"
       debounce-duration="3000"
       auto="[[autoDownload]]"
+      loading="[[loadingIncentives]]"
     ></iron-ajax>
 
     <iron-ajax
@@ -84,6 +85,15 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
         accessToken: {
           type: String,
           value: null,
+          notify: true
+        },
+
+        /**
+        * True while getting all incentives
+        */
+        loadingIncentives: {
+          type: Boolean,
+          value: false,
           notify: true
         },
 
@@ -228,7 +238,7 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
 
       _computeRequestHeaders: function(accessToken) {
         return {
-          'authorization': 'Bearer ' + accessToken 
+          'authorization': 'Bearer ' + accessToken
         }
       },
 
