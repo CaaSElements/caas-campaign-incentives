@@ -27,7 +27,7 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
       last-response="{{_apiData}}"
       debounce-duration="3000"
       auto="[[autoDownload]]"
-      loading="[[loadingIncentives]]"
+      loading="{{loadingIncentives}}"
     ></iron-ajax>
 
     <iron-ajax
@@ -207,6 +207,7 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
       }} item The Item to be updated
       */
       updateItem: function(item) {
+        this.fire('incentive-update-loading', item.id);
         this.$.updateItem.url = this.apiEndpoint + '/entrepreneurs/'+ this.campaignId +'/incentives/' + item.id;
         this.$.updateItem.body = JSON.stringify(item);
         this.$.updateItem.generateRequest();
@@ -260,7 +261,8 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
           currentStock: apiDataItem.currentStock,
           available: apiDataItem.available,
           id: apiDataItem.id,
-          contractTypeId: apiDataItem.contractTypeId
+          contractTypeId: apiDataItem.contractTypeId,
+          loading: false
         }
       },
 
@@ -277,10 +279,10 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
         });
       },
 
-      _handleUpdateItemResponse: function() {
+      _handleUpdateItemResponse: function(evt, data) {
+        this.fire('incentive-updated', JSON.parse(this.$.updateItem.body).id);
         this.$.updateItem.url = null;
         this.$.updateItem.body = {};
-        this.fire('incentive-updated');
       },
 
       _handleUpdateItemError: function(evt) {
