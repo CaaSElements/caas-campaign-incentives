@@ -278,9 +278,10 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
         });
       },
 
-      _handleUpdateItemResponse: function(evt, data) {
+      _handleUpdateItemResponse: function() {
         this.$.updateItem.url = null;
         this.$.updateItem.body = {};
+        this.fire('incentive-updated');
       },
 
       _handleUpdateItemError: function(evt) {
