@@ -5,7 +5,7 @@
 `caas-campaign-incentives`
 Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
 
-@demo demo/index.html 
+@demo demo/index.html
 -->
 
 <dom-module id="caas-campaign-incentives">
@@ -27,6 +27,7 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
       last-response="{{_apiData}}"
       debounce-duration="3000"
       auto="[[autoDownload]]"
+      loading="{{loadingIncentives}}"
     ></iron-ajax>
 
     <iron-ajax
@@ -84,6 +85,15 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
         accessToken: {
           type: String,
           value: null,
+          notify: true
+        },
+
+        /**
+        * True while getting all incentives
+        */
+        loadingIncentives: {
+          type: Boolean,
+          value: false,
           notify: true
         },
 
@@ -197,6 +207,7 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
       }} item The Item to be updated
       */
       updateItem: function(item) {
+        this.fire('incentive-loading', item.id);
         this.$.updateItem.url = this.apiEndpoint + '/entrepreneurs/'+ this.campaignId +'/incentives/' + item.id;
         this.$.updateItem.body = JSON.stringify(item);
         this.$.updateItem.generateRequest();
@@ -228,7 +239,7 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
 
       _computeRequestHeaders: function(accessToken) {
         return {
-          'authorization': 'Bearer ' + accessToken 
+          'authorization': 'Bearer ' + accessToken
         }
       },
 
@@ -250,7 +261,8 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
           currentStock: apiDataItem.currentStock,
           available: apiDataItem.available,
           id: apiDataItem.id,
-          contractTypeId: apiDataItem.contractTypeId
+          contractTypeId: apiDataItem.contractTypeId,
+          loading: false
         }
       },
 
