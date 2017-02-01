@@ -207,6 +207,7 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
       }} item The Item to be updated
       */
       updateItem: function(item) {
+        this.fire('incentive-loading', item.id);
         this.$.updateItem.url = this.apiEndpoint + '/entrepreneurs/'+ this.campaignId +'/incentives/' + item.id;
         this.$.updateItem.body = JSON.stringify(item);
         this.$.updateItem.generateRequest();
