@@ -16,7 +16,6 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
       url="[[apiEndpoint]]/campaigns/[[campaignId]]/incentives/settings"
       method="GET"
       last-response="{{_apiSettings}}"
-      debounce-duration="3000"
       auto="[[campaignId]]"
     ></iron-ajax>
 
@@ -25,7 +24,6 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
       url="[[apiEndpoint]]/campaigns/[[campaignId]]/incentives"
       method="GET"
       last-response="{{_apiData}}"
-      debounce-duration="3000"
       auto="[[autoDownload]]"
     ></iron-ajax>
 
@@ -37,7 +35,6 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
       on-response="_handleAddItemResponse"
       on-error="_handleAddItemError"
       last-response="{{_apiData}}"
-      debounce-duration="3000"
     ></iron-ajax>
 
     <iron-ajax
@@ -47,7 +44,6 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
       on-response="_handleUpdateItemResponse"
       on-error="_handleUpdateItemError"
       last-response="{{_apiData}}"
-      debounce-duration="3000"
     ></iron-ajax>
 
     <iron-ajax
@@ -58,7 +54,6 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
       on-response="_handleRemoveItemResponse"
       on-error="_handleRemoveItemError"
       last-response="{{_apiData}}"
-      debounce-duration="3000"
     ></iron-ajax>
 
   </template>
