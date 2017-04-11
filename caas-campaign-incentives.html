@@ -270,7 +270,7 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
         this.$.addItem.body = {};
         this.fire('incentive-add-error', {
           message: evt.detail.error.message,
-          response: event.detail.request.xhr.response
+          response: evt.detail.request.xhr.response
         });
       },
 
@@ -285,7 +285,7 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
         this.$.updateItem.body = {};
         this.fire('incentive-update-error', {
           message: evt.detail.error.message,
-          response: event.detail.request.xhr.response
+          response: evt.detail.request.xhr.response
         });
       },
 
@@ -298,7 +298,7 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
         this.$.removeItem.url = null;
         this.fire('incentive-delete-error', {
           message: evt.detail.error.message,
-          response: event.detail.request.xhr.response
+          response: evt.detail.request.xhr.response
         });
       },
 
