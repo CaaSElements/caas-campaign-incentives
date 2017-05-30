@@ -220,7 +220,7 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
 
       _computeIncentives: function(apiDataChange) {
         var apiData = apiDataChange.base;
-        if(!apiData) return;
+        if(!apiData) return [];
         return apiData.map(this._parseApiDataItemToIncentive)
       },
 
