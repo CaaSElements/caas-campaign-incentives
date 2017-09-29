@@ -13,7 +13,7 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
 
     <iron-ajax
       id="getSettings"
-      url="[[apiEndpoint]]/campaigns/[[campaignId]]/incentives/settings"
+      url="[[apiEndpoint]]/campaigns/[[campaignId]]/campaigntypes"
       method="GET"
       last-response="{{_apiSettings}}"
       auto="[[campaignId]]"
@@ -132,7 +132,7 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
         */
         minimumAllowedInvestment: {
           type: Number,
-          computed: '_getApiValue(_apiSettings.minimumAllowedInvestment)',
+          computed: '_getApiValue(_apiSettings.0.minimumInvestment)',
           notify: true
         },
 
@@ -141,7 +141,7 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
         */
         maximumAllowedInvestment: {
           type: Number,
-          computed: '_getApiValue(_apiSettings.maximumAllowedInvestment)',
+          computed: '_getApiValue(_apiSettings.0.maximumInvestment)',
           notify: true
         },
 
@@ -150,7 +150,7 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
         */
         allowedContractTypeIds: {
           type: Number,
-          computed: '_getApiValue(_apiSettings.allowedContractTypeIds)',
+          computed: '_getAllowedContractTypeIds(_apiSettings)',
           notify: true
         },
 
@@ -247,6 +247,12 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
 
       _getApiValue: function(value) {
         return value;
+      },
+
+      _getAllowedContractTypeIds: function(campaignTypes) {
+          return campaignTypes.map(function(campaignType) {
+              return campaignType.contractTypeId;
+          });
       },
 
       _parseApiDataItemToIncentive: function(apiDataItem) {
