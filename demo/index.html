@@ -70,7 +70,7 @@
           </template>
 
           <template is="dom-if" if="[[signedIn]]">
-            
+
             <h2>Signed In as [[userRole]] #[[userId]]</h2>
             <form on-submit="signOut">
               <input type="submit" value="Sign Out">
@@ -91,13 +91,6 @@
                 max$="[[maximumAllowedInvestment]]"
                 value="{{newItem.minimumInvestment::input}}"
                 placeholder="minimum investment"
-              ><p>
-
-              <label>extra costs?</label><br>
-              <input
-                type="number"
-                value="{{newItem.costs::input}}"
-                placeholder="costs"
               ><p>
 
               <label>Total Stock (0 = unlimited)</label><br>
@@ -153,13 +146,6 @@
                     max$="[[maximumAllowedInvestment]]"
                     value="{{item.minimumInvestment::input}}"
                     placeholder="minimum investment"
-                  ><p>
-
-                  <label>extra costs?</label><br>
-                  <input
-                    type="number"
-                    value="{{item.costs::input}}"
-                    placeholder="costs"
                   ><p>
 
                   <label>Total Stock (0 = unlimited)</label><br>
@@ -223,7 +209,7 @@
             }
 
             demo.newItem = {}
-            
+
             demo.addItem = function(evt) {
               evt.preventDefault();
               incentives.addItem(demo.newItem);
