@@ -161,11 +161,15 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
 
         _requestHeaders: {
           type: Object,
-          computed: '_computeRequestHeaders(accessToken)'
+          computed: '_computeRequestHeaders(accessToken, activeRole)'
         },
 
         _apiData: {
           type: Array
+        },
+        activeRole: {
+          type: String,
+          notify: true
         }
 
       },
@@ -237,9 +241,10 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
         return groupedIncentives;
       },
 
-      _computeRequestHeaders: function(accessToken) {
+      _computeRequestHeaders: function(accessToken, activeRole) {
         return {
-          'authorization': 'Bearer ' + accessToken
+          'authorization': 'Bearer ' + accessToken,
+          'activeRole': activeRole
         }
       },
 
