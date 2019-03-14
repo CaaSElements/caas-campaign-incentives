@@ -306,7 +306,7 @@ Polymer Campaign Incentives Element for Crowdfunding as a Service Solutions
       _updateIncentiveByArrayIndex: function(updatedIncentive, arrayIndex) {
         var updatedIncentive = this._parseApiDataItemToIncentive(updatedIncentive);
         if (arrayIndex != -1) {
-          return this.splice('incentives', arrayIndex, 1, updatedIncentive);
+            return this.set('incentives.'+ arrayIndex, updatedIncentive);
         }
       },
 
